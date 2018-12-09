@@ -13,7 +13,7 @@ import (
 
 func main() {
 	// handle command line arguments
-	var configFileName = flag.String("c", "/etc/i3icons.config", "config file")
+	var configFileName = flag.String("c", "/etc/i3icons2.config", "config file")
 	flag.Parse()
 
 	// Open our configFile
