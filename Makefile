@@ -1,5 +1,6 @@
 PACKAGE	= i3icons2
 GOPATH	= $(CURDIR)/.gopath
+GOBUILD	= $(CURDIR)/bin
 GOBIN	= "/usr/local/bin/"
 GOFILES	= $(wildcard *.go)
 CONFIG 	= $(CURDIR)/icons.config
@@ -11,11 +12,11 @@ all:    get build
 
 .PHONY: get build 
 get:
-	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go get .
+	@GOPATH=$(GOPATH) GOBIN=$(GOBUILD) go get .
 
 build:
 	@echo "Building $(GOFILES)"
-	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go build -o bin/$(PACKAGE) $(GOFILES)
+	@GOPATH=$(GOPATH) GOBIN=$(GOBUILD) go build -o $(GOBUILD)/$(PACKAGE) $(GOFILES)
 
 .PHONY: install 
 install:
