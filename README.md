@@ -4,6 +4,9 @@ go version of i3icons - native deamon to rename workspaces with fontawesome-icon
 ## i3 config to switch to a workspace by number, not by name
 
 ```
+
+exec_always --no-startup-id killall i3icons && i3icons || i3icons
+
 set $ws1 number 1
 set $ws2 number 2
 set $ws3 number 3
