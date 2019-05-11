@@ -122,7 +122,7 @@ func EventLoop(events chan i3ipc.Event, ipcsocket *i3ipc.IPCSocket, config map[s
 				}
 				// rename workspace
 				for _, windowname := range windownames {
-					newname = newname + windowname
+					newname = newname + " " + windowname + " "
 				}
 				ipcsocket.Command("rename workspace \"" + name + "\" to " + newname)
 			}
