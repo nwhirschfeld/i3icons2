@@ -99,15 +99,17 @@ func EventLoop(events chan i3ipc.Event, ipcsocket *i3ipc.IPCSocket, config map[s
 			wss, _ := SubNodeByName(&screen, "content")
 			for _, ws := range wss.Nodes {
 				name := ws.Name
-				number := strings.Split(name, ":")[0]
+				number := strings.Split(name, " ")[0]
 				windows, _ := FlattenNode(&ws)
-				newname := number + ":"
+				newname := number
 				windownames := make([]string, len(windows))
 				for i, win := range windows {
 					winname := win.WindowProperties.Class
 					// rename window to config item, if present
 					if val, ok := config[winname]; ok {
 						winname = val
+					} else if len(winname) > 1 {
+						winname = fmt.Sprintf("%s%s", strings.ToUpper(winname[:1]), winname[1:])
 					}
 					// check if workspace name already contains window title
 					choose := true
