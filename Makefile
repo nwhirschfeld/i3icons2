@@ -1,5 +1,4 @@
 PACKAGE	= i3icons2
-GOPATH	= $(CURDIR)/.gopath
 GOBUILD	= $(CURDIR)/bin
 GOBIN	= "/usr/local/bin/"
 GOFILES	= $(wildcard *.go)
@@ -11,8 +10,6 @@ CONFDIR	= "/etc/"
 all:    get build
 
 .PHONY: get build 
-get:
-	@GOPATH=$(GOPATH) GOBIN=$(GOBUILD) go get .
 
 build:
 	@echo "Building $(GOFILES)"
