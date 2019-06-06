@@ -42,7 +42,7 @@ func main() {
 	EventLoop(channel, ipcsocket, config)
 }
 
-// get the subnode of an I3Node by name
+// SubNodeByName gets the subnode of an I3Node by name
 func SubNodeByName(node *i3ipc.I3Node, name string) (root i3ipc.I3Node, err error) {
 	if strings.Compare(node.Name, name) == 0 {
 		return *node, nil
@@ -56,7 +56,7 @@ func SubNodeByName(node *i3ipc.I3Node, name string) (root i3ipc.I3Node, err erro
 	return i3ipc.I3Node{}, errors.New("no such Node")
 }
 
-// get the subnodes of an I3Node which doesn't match to a specific name
+// SubNodesWithoutName gets the subnodes of an I3Node which doesn't match to a specific name
 func SubNodesWithoutName(node *i3ipc.I3Node, name string) (nodes []i3ipc.I3Node, err error) {
 	result := make([]i3ipc.I3Node, len(node.Nodes))
 	for i, item := range node.Nodes {
@@ -67,7 +67,7 @@ func SubNodesWithoutName(node *i3ipc.I3Node, name string) (nodes []i3ipc.I3Node,
 	return result, nil
 }
 
-// get the ends of the trees
+// FlattenNode gets the ends of the trees
 func FlattenNode(node *i3ipc.I3Node) (nodes []i3ipc.I3Node, err error) {
 	if len(node.Nodes) == 0 {
 		result := make([]i3ipc.I3Node, 1)
@@ -90,9 +90,9 @@ func FlattenNode(node *i3ipc.I3Node) (nodes []i3ipc.I3Node, err error) {
 	return result, nil
 }
 
-// main event loop
+// EventLoop - main event loop
 func EventLoop(events chan i3ipc.Event, ipcsocket *i3ipc.IPCSocket, config map[string]string) {
-	for _ = range events {
+	for range events {
 		tree, _ := ipcsocket.GetTree()
 		screens, _ := SubNodesWithoutName(&tree, "__i3")
 		for _, screen := range screens {
