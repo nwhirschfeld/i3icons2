@@ -1,6 +1,8 @@
 # i3icons2
 go version of i3icons - native deamon to rename workspaces with fontawesome-icons based on open applications
 
+**It's recommended to have fontawesome-icons v5**
+
 ## i3 config to switch to a workspace by number, not by name
 
 ```
