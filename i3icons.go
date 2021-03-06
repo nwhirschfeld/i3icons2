@@ -5,15 +5,22 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
+	"os/user"
 	"strings"
 
 	"github.com/nwhirschfeld/i3ipc"
 )
 
 func main() {
+	usr, err := user.Current()
+    if err != nil {
+        log.Fatal( err )
+    }
+
 	// handle command line arguments
-	var configFileName = flag.String("c", "/etc/i3icons2.config", "config file")
+	var configFileName = flag.String("c", usr.HomeDir + "/.config/i3icons/i3icons2.config", "config file")
 	var verbose = flag.Bool("v", false, "verbose")
 	flag.Parse()
 
