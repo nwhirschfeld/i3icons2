@@ -14,6 +14,7 @@ import (
 func main() {
 	// handle command line arguments
 	var configFileName = flag.String("c", "/etc/i3icons2.config", "config file")
+	var verbose = flag.Bool("v", false, "verbose")
 	flag.Parse()
 
 	// Open our configFile
@@ -39,7 +40,7 @@ func main() {
 	// open I3IPC socket and subscribe to window events
 	ipcsocket, _ := i3ipc.GetIPCSocket()
 	channel, err := i3ipc.Subscribe(i3ipc.I3WindowEvent)
-	EventLoop(channel, ipcsocket, config)
+	EventLoop(channel, ipcsocket, config, *verbose)
 }
 
 // SubNodeByName gets the subnode of an I3Node by name
@@ -91,7 +92,7 @@ func FlattenNode(node *i3ipc.I3Node) (nodes []i3ipc.I3Node, err error) {
 }
 
 // EventLoop - main event loop
-func EventLoop(events chan i3ipc.Event, ipcsocket *i3ipc.IPCSocket, config map[string]string) {
+func EventLoop(events chan i3ipc.Event, ipcsocket *i3ipc.IPCSocket, config map[string]string, verbose bool) {
 	for range events {
 		tree, _ := ipcsocket.GetTree()
 		screens, _ := SubNodesWithoutName(&tree, "__i3")
@@ -104,12 +105,15 @@ func EventLoop(events chan i3ipc.Event, ipcsocket *i3ipc.IPCSocket, config map[s
 				newname := number
 				windownames := make([]string, len(windows))
 				for i, win := range windows {
-					winname := win.WindowProperties.Class
+					winname:=strings.ToLower(win.WindowProperties.Class)
+					if(verbose){
+						fmt.Println(winname)
+					}
 					// rename window to config item, if present
 					if val, ok := config[winname]; ok {
 						winname = val
-					} else if len(winname) > 1 {
-						winname = fmt.Sprintf("%s%s", strings.ToUpper(winname[:1]), winname[1:])
+					} else if len(winname) > 7 {
+						winname = winname[:4] + ".." + winname[len(winname)-3:]
 					}
 					// check if workspace name already contains window title
 					choose := true
@@ -124,7 +128,9 @@ func EventLoop(events chan i3ipc.Event, ipcsocket *i3ipc.IPCSocket, config map[s
 				}
 				// rename workspace
 				for _, windowname := range windownames {
-					newname = fmt.Sprintf("%s %s", newname, windowname)
+					if(len(windowname) > 0) {
+						newname = fmt.Sprintf("%s %s", newname, windowname)
+					}
 				}
 				ipcsocket.Command("rename workspace \"" + name + "\" to " + newname)
 			}
