@@ -60,6 +60,10 @@ func EventLoop(events chan i3ipc.Event, ipcsocket *i3ipc.IPCSocket, config map[s
 			name := ws.Name
 			number := strings.Split(name, " ")[0]
 			windows := ws.Leaves()
+			// empty workspace - leave it
+			if len(windows) == 0 {
+				continue
+			}
 			newname := number
 			windownames := make([]string, len(windows))
 			for i, win := range windows {
